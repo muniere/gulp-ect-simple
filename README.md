@@ -1,5 +1,7 @@
 # gulp-ect-simple
 
+[![Build Status](https://travis-ci.org/muniere/gulp-ect-simple.svg)](https://travis-ci.org/muniere/gulp-ect-simple)
+
 Gulp plugin to compile with [ect](http://ectjs.com/)
 
 ## Installation
