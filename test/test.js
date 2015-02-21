@@ -77,4 +77,44 @@ describe('gulp-ect-simple', function() {
       path: 'invalid.ect'
     }));
   });
+  
+  it('compiles ect file into html using a dynamic data callback', function(done) {
+
+    var stream = ect({
+      options: {
+        root: 'test/source' 
+      },
+      data: function (file) {
+        if (file.path === 'dynamic.ect') {
+          return {
+            title: 'Hello, Dynamic World!',
+            message: 'Hello, Dynamic Earth.'
+          };
+        } else {
+          return {
+            title: 'Unused title!',
+            message: 'Unseen message'
+          };
+        }
+      }
+    });
+
+    var expected = fs.readFileSync('test/fixture/dynamic.html').toString().replace(/\n +/g, '\n');
+
+    stream.on('data', function(file) {
+      // do not test first whitespaces of each line
+      var actual = file.contents.toString().replace(/\n +/g, '\n');
+
+      expect(file.path).to.eql('dynamic.html');
+      expect(actual).to.eql(expected);
+      done();
+    });
+
+    stream.write(new gutil.File({
+      cwd: 'test/',
+      base: 'test/source',
+      path: 'dynamic.ect'
+    }));
+  });
+  
 });

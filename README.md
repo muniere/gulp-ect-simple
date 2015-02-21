@@ -32,6 +32,29 @@ gulp.task('ect', function(){
 });
 ```
 
+Or the data parameter can be a function that receives a file object so that you can choose what data to send into the template for compilation - handy for rendering pages for static sites!
+
+```js
+var gulp     = require('gulp');
+var ect      = require('gulp-ect-simple');
+var pageData = require('./my-page-data');
+
+gulp.task('ect', function(){
+  return gulp.src('./templates/*.ect')
+    .pipe(ect({
+      options: { 
+        root: 'app/views',
+        ext:  '.ect' 
+      },
+      data: function (file) {
+        return pageData[file.path] || {foo: 'Default data'};
+      }
+    }))
+    .pipe(gulp.dest('./dist'));
+});
+```
+
+
 ## API
 
 ### ect(arg)

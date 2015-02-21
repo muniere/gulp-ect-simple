@@ -10,14 +10,22 @@ module.exports = function (arg) {
 
   var options = arg.options || {};
   options.ext = options.ext || '.ect';
-
-  var data = arg.data || {};
-
+  
+  var dataFn;
+  
+  if (typeof arg.data === 'function') {
+    dataFn = arg.data;
+  } else {
+    dataFn = function () {
+      return arg.data || {};
+    };
+  }
+  
   var ect = new ECT(options);
 
   return through.obj(function(file, enc, callback) {
     try {
-      ect.render(gutil.replaceExtension(file.path, ""), data, function(err, html) {
+      ect.render(gutil.replaceExtension(file.path, ""), dataFn(file), function(err, html) {
         if (err) {
           throw err;
         }
