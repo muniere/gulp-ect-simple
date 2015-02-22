@@ -47,7 +47,9 @@ gulp.task('ect', function(){
         ext:  '.ect' 
       },
       data: function (file) {
-        return pageData[file.path] || {foo: 'Default data'};
+        // The file parameter is a vinyl object:
+        // https://github.com/wearefractal/vinyl
+        return pageData[file.relative] || {foo: 'Default data'};
       }
     }))
     .pipe(gulp.dest('./dist'));
